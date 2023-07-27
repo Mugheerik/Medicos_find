@@ -1,3 +1,4 @@
+import { addDoc, collection } from "firebase/firestore";
 import React, { useState } from "react";
 import {
   View,
@@ -8,16 +9,52 @@ import {
   ScrollView,
   StatusBar,
 } from "react-native";
+import { db } from "../firebaseconfig";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const Signup = ({navigation}) => {
   const [Signup, setSignup] = useState(false);
+  const [name,setName] = useState("");
+  const [email,setEmail] = useState("");
+  const [pass,setPass] = useState("");
 
+
+
+  const gotoprofile=()=> navigation.navigate("user_profile")
   const handleSignup = () => {
+    const auth =  getAuth();
+createUserWithEmailAndPassword(auth, email, pass)
+  .then((userCredential) => {
+    // Signed in 
+    writedata();
     setSignup(true);
+  gotoprofile;
+    const user = userCredential.user;
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+   console.log(errorCode,errorMessage)
+  });
   };
+ 
   const handleDoctor = () => navigation.navigate('Doctor Registration');
 
- 
+ const writedata = async ()=>{
+  try {
+    const user = await addDoc(collection(db,"Users"),
+    {
+      Name:name,
+      Email:email,
+      Password:pass
+    }
+    );
+    console.log("document written with id :",user.id)
+  } catch (error) {
+    console.log(error);
+  }
+ }
 
   return (
     <View style={styles.container}>
@@ -32,15 +69,21 @@ const Signup = ({navigation}) => {
               placeholder="UserName"
               style={styles.input}
               autoCapitalize="none"
+              value={name}
+              onChangeText={setName}
             />
             <TextInput
               placeholder="Email"
               style={styles.input}
+              value={email}
+              onChangeText={setEmail}
               autoCapitalize="none"
             />
             <TextInput
               placeholder="Password"
               style={styles.input}
+              value={pass}
+              onChangeText={setPass}
               secureTextEntry={true}
             />
             <TouchableOpacity

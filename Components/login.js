@@ -1,3 +1,4 @@
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import {
   View,
@@ -9,11 +10,30 @@ import {
   StatusBar,
 } from "react-native";
 
-const Login = () => {
+const Login = ({navigation}) => {
   const [login, setLogin] = useState(false);
+  const [email,setEmail] = useState("");
+  const [pass,setPass] = useState("");
+  
+  const gotoprofile=()=> navigation.navigate("user_profile")
+  const handleLogin = () =>{
 
-  const handleLogin = () => {
+
+const auth = getAuth();
+signInWithEmailAndPassword(auth, email, pass)
+.then((userCredential) => {
     setLogin(true);
+    gotoprofile;
+    console.log("logined")
+    
+    // Signed in 
+    const user = userCredential.user;
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  });
   };
 
  
@@ -30,11 +50,15 @@ const Login = () => {
             <TextInput
               placeholder="Email"
               style={styles.input}
+              value={email}
+              onChangeText={setEmail}
               autoCapitalize="none"
             />
             <TextInput
               placeholder="Password"
               style={styles.input}
+              value={pass}
+              onChangeText={setPass}
               secureTextEntry={true}
             />
             <TouchableOpacity

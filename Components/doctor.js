@@ -1,3 +1,4 @@
+import firestore from '@firebase/firestore';
 import React, { useState } from "react";
 import {Picker } from "@react-native-picker/picker"
 import {
@@ -10,6 +11,9 @@ import {
   StatusBar,
 
 } from "react-native";
+import { getAuth ,createUserWithEmailAndPassword} from 'firebase/auth';
+import { db } from "../firebaseconfig";
+import { addDoc, collection,setDoc,doc,getDocs } from "firebase/firestore";
 
 const Doctorsignup = ({navigation}) => {
   const [Register, setRegister] = useState(false);
@@ -20,29 +24,8 @@ const Doctorsignup = ({navigation}) => {
   const [Category, setCategory] = useState("");
 
 
-  const setTextInputValues = (values) => {
-    const inputs = useRef(React.createElement('div'));
   
-    for (const [name, value] of Object.entries(values)) {
-      const input = useRef(React.createElement('input', {
-        name,
-        value,
-      }));
-  
-      inputs.current.appendChild(input.current);
-    }
-  
-    return inputs.current;
-  };
 
-  
-  
-  const handleDoctor = () => {setRegister(true)};
-  const handleChange = (itemValue) => {
-    setCategory(itemValue);
-    console.log(itemValue);
- 
-};
   const categories =[
     { id:1,label: "General Physician", value: "General Physician"},
     {id:2,label: "Pediatrician", value: "Pediatrician"},
@@ -58,6 +41,90 @@ const Doctorsignup = ({navigation}) => {
     {id:12,label: "Endocrinologist", value: "Endocrinologist"},
   ];
   
+  
+ 
+
+  
+  
+
+  const adddata=async()=>{
+
+   
+   try {
+    const docref= doc(collection(db,"Doctor"));
+    const colref= collection(docref,"Pulmonogist")
+    await addDoc(colref),{
+      Name:name,
+      Email:email,
+     Password:password,
+     Location:location,
+    Category:Category,
+ }
+   } catch (error) {
+    console.log(error);
+   }
+      
+    
+    
+
+    // await setDoc(doc(db,"Doctor","User_Data"), {
+    //   Name:name,
+    //   Email:email,
+    //   Password:password,
+    //   Location:location,
+    //   Category:Category,
+
+    // });
+    // console.log("data added");
+
+   }
+  const handleChange = (itemValue) => {
+    setCategory(itemValue);
+    console.log(itemValue);
+    
+ 
+};
+
+const read=async()=>{
+try {
+  const querySnapshot = await getDocs(collection(db, "Doctor"));
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    console.log(doc.id);
+  });
+} catch (error) {
+  console.log(error);
+}
+}
+const handleDoctor = () => {
+  setRegister(true);
+     read();
+    //  adddata();
+  // const auth =  getAuth();
+  // createUserWithEmailAndPassword(auth, email, password)
+  //   .then((userCredential) => {
+  //     // Signed in 
+  //     setRegister(true);
+  //     read();
+  //   adddata();
+  //     const user = userCredential.user;
+  //     // ...
+  //   })
+  //   .catch((error) => {
+  //     const errorCode = error.code;
+  //     const errorMessage = error.message;
+  //    console.log(errorCode,errorMessage)
+  //   });
+    };
+ 
+  
+
+
+
+
+    
+    
+ 
   const mapItemsToOptions = (items) => {
     return items.map((item) => {
       return (
@@ -86,18 +153,21 @@ const Doctorsignup = ({navigation}) => {
               style={styles.input}
               autoCapitalize="none"
               value={name}
+              onChangeText={setName}
             />
             <TextInput
               placeholder="Email"
               style={styles.input}
               autoCapitalize="none"
               value={email}
+              onChangeText={setEmail}
             />
             <TextInput
               placeholder="Clinic Location"
               style={styles.input}
               autoCapitalize="none"
               value={location}
+              onChangeText={setLocation}
             />
         
       <TextInput
@@ -105,6 +175,7 @@ const Doctorsignup = ({navigation}) => {
         style={styles.input}
         secureTextEntry={true}
         value={password}
+        onChangeText={setPassword}
       />
       <Text style={{marginTop:10}}>Select your category</Text>
       <Picker
@@ -131,9 +202,11 @@ const Doctorsignup = ({navigation}) => {
             </TouchableOpacity>
           </View>
       </ScrollView>
+            
     </View>
   );
 };
+  
 
 const styles = StyleSheet.create({
   container: {

@@ -10,6 +10,14 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Doctorsignup from './Components/doctor';
 import Datahandle from './Screens/assignment';
+import Doctor_Categories from './Components/doctor_categories';
+import Display_doc from './Screens/view_doctor';
+
+
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { useState } from 'react';
+
+const Drawer = createDrawerNavigator();
 
 
 const Stack=createNativeStackNavigator();
@@ -34,19 +42,51 @@ const Tab = createMaterialBottomTabNavigator();
         }}/>
     </Tab.Navigator>
   );
-}
+      }
+
+
+  function MyDrawer() {
+   const [state,setState]=useState([])
+    const state_update =async()=>{
+      const arr=[];
+          try {
+              const snapshot=await getDocs(collection(db,"Doctor"));
+           snapshot.forEach(doc=>{
+           
+          arr.push(doc.id);
+           })
+          } catch (error) {
+              console.log(error)
+          }
+        state_update;
+     setState(id=arr);
+     console.log(state);
+  }
+    return (
+      <Drawer.Navigator>
+        { state.map(item=>{
+          return(
+            <Drawer.Screen name={item.id} component={item.id} />
+          )
+        })}
+      </Drawer.Navigator>
+    );
+  }
+
 export default function App() {
   return (
-    // <NavigationContainer >
-    // <Stack.Navigator   >
-    //   <Stack.Screen name="Home" component={Homepage} />
-    //   <Stack.Screen name="Get_Started" component={MyTabs} />
-    //   <Stack.Screen name="Doctor Registration" component={Doctorsignup} />
-    // </Stack.Navigator>
-    // </NavigationContainer>
-    <View style={styles.container}>
-     <Datahandle/>
-    </View>
+    <NavigationContainer >
+    <Stack.Navigator   >
+      <Stack.Screen name="Home" component={Homepage} />
+      <Stack.Screen name="Get_Started" component={MyTabs} />
+    </Stack.Navigator>
+      <Stack.Screen name="Doctor Registration" component={Doctorsignup} />
+      <Stack.Screen name="user_profile" component={MyDrawer} />
+    
+    </NavigationContainer>
+    //  <View style={styles.container}>
+    //   <Display_doc/>
+    //  </View> 
 
  );
 }
