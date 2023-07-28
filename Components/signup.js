@@ -20,7 +20,8 @@ const Signup = ({navigation}) => {
 
 
 
-  const gotoprofile=()=> navigation.navigate("user_profile")
+  const gotoprofile=()=>{ navigation.navigate('user_profile');
+console.log("profile")};
   const handleSignup = () => {
     const auth =  getAuth();
 createUserWithEmailAndPassword(auth, email, pass)
@@ -28,7 +29,7 @@ createUserWithEmailAndPassword(auth, email, pass)
     // Signed in 
     writedata();
     setSignup(true);
-  gotoprofile;
+  gotoprofile();
     const user = userCredential.user;
     // ...
   })

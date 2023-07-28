@@ -15,7 +15,7 @@ const Login = ({navigation}) => {
   const [email,setEmail] = useState("");
   const [pass,setPass] = useState("");
   
-  const gotoprofile=()=> navigation.navigate("user_profile")
+  const gotoprofile=()=> navigation.navigate('user_profile')
   const handleLogin = () =>{
 
 
@@ -23,7 +23,7 @@ const auth = getAuth();
 signInWithEmailAndPassword(auth, email, pass)
 .then((userCredential) => {
     setLogin(true);
-    gotoprofile;
+    gotoprofile();
     console.log("logined")
     
     // Signed in 

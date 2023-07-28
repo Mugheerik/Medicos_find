@@ -23,23 +23,25 @@ const Doctorsignup = ({navigation}) => {
   const [password, setPassword] = useState("");
   const [Category, setCategory] = useState("");
 
-
+  const [state,setState]=useState([""])
+    const state_update =async()=>{
+        const arr=[];
+            try {
+                const snapshot=await getDocs(collection(db,"Doctor"));
+             snapshot.forEach(doc=>{
+             
+            arr.push(doc.id);
+             })
+            } catch (error) {
+                console.log(error)
+            }
+          
+       setState(value=arr);
+       
+    }
   
-
-  const categories =[
-    { id:1,label: "General Physician", value: "General Physician"},
-    {id:2,label: "Pediatrician", value: "Pediatrician"},
-    {id:3,label: "Gynecologist", value: "Gynecologist"},
-    {id:4,label: "Cardiologist", value: "Cardiologist"},
-    {id:5,label: "Oncologist", value: "Oncologist"},
-    {id:6,label: "Gastroenterologist", value: "Gastroenterologist"},
-    {id:7,label: "Pulmonologist", value: "Pulmonologist"},
-    {id:8,label: "Infectious Disease Physician", value: "Infectious Disease Physician"},
-    {id:9,label: "Nephrologist", value: "Nephrologist"},
-    {id:10,label: "Endocrinologist", value: "Endocrinologist"},
-    {id:11,label: "Pulmonologist", value: "Pulmonologist"},
-    {id:12,label: "Endocrinologist", value: "Endocrinologist"},
-  ];
+state_update();
+  
   
   
  
@@ -51,9 +53,9 @@ const Doctorsignup = ({navigation}) => {
 
    
    try {
-    const docref= doc(collection(db,"Doctor"));
-    const colref= collection(docref,"Pulmonogist")
-    await addDoc(colref),{
+   
+    
+    await addDoc(db.collection("Doctor").doc(Category)),{
       Name:name,
       Email:email,
      Password:password,
@@ -85,30 +87,23 @@ const Doctorsignup = ({navigation}) => {
  
 };
 
-const read=async()=>{
-try {
-  const querySnapshot = await getDocs(collection(db, "Doctor"));
-  querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    console.log(doc.id);
-  });
-} catch (error) {
-  console.log(error);
-}
-}
+
+    
+ 
+    
 const handleDoctor = () => {
-  setRegister(true);
-     read();
-    //  adddata();
+
+  adddata();
+    
   // const auth =  getAuth();
   // createUserWithEmailAndPassword(auth, email, password)
   //   .then((userCredential) => {
   //     // Signed in 
   //     setRegister(true);
-  //     read();
+      
   //   adddata();
   //     const user = userCredential.user;
-  //     // ...
+  //     console.log(user.displayName)
   //   })
   //   .catch((error) => {
   //     const errorCode = error.code;
@@ -129,9 +124,9 @@ const handleDoctor = () => {
     return items.map((item) => {
       return (
         <Picker.Item style={styles.picker}
-          key={item.id}
-          value={item.value}
-          label={item.label}
+
+          value={item.id}
+          label={item.id}
         />
       );
     });
@@ -184,7 +179,7 @@ const handleDoctor = () => {
         style={styles.input}
         
       >
-        {mapItemsToOptions(categories)}
+        {mapItemsToOptions(state)}
         
         
       </Picker>

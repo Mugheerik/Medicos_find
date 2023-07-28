@@ -12,10 +12,13 @@ import Doctorsignup from './Components/doctor';
 import Datahandle from './Screens/assignment';
 import Doctor_Categories from './Components/doctor_categories';
 import Display_doc from './Screens/view_doctor';
-
+import Cardiology from './Components/cardiology';
+import { Provider as PaperProvider } from 'react-native-paper';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useState } from 'react';
+import DrawerContent from './Components/drawer';
+
 
 const Drawer = createDrawerNavigator();
 
@@ -63,29 +66,41 @@ const Tab = createMaterialBottomTabNavigator();
      console.log(state);
   }
     return (
-      <Drawer.Navigator>
-        { state.map(item=>{
+      <Drawer.Navigator    >
+        {/* { state.map(item=>{
           return(
             <Drawer.Screen name={item.id} component={item.id} />
           )
-        })}
+        })} */}
+        <Drawer.Screen   name="profile" component={Cardiology}  />
+        
+
+        <Drawer.Screen  name="Cardiology" component={Cardiology} />
+        <Drawer.Screen  name="pulmonology" component={Cardiology} />
+        <Drawer.Screen  name="physciology" component={Cardiology} />
+        
+        
+        
       </Drawer.Navigator>
     );
   }
 
 export default function App() {
   return (
+    <PaperProvider>
+
     <NavigationContainer >
     <Stack.Navigator   >
-      <Stack.Screen name="Home" component={Homepage} />
-      <Stack.Screen name="Get_Started" component={MyTabs} />
+      {/* <Stack.Screen name="Home" component={Homepage} />
+      <Stack.Screen name="Get_Started" component={MyTabs} />*/}
+      <Stack.Screen name="Doctor Registration" component={Doctorsignup} /> 
+      {/* <Stack.Screen name="user_profile" component={MyDrawer} options={{ headerShown: false }} /> */}
     </Stack.Navigator>
-      <Stack.Screen name="Doctor Registration" component={Doctorsignup} />
-      <Stack.Screen name="user_profile" component={MyDrawer} />
-    
+     
     </NavigationContainer>
+    </PaperProvider>
     //  <View style={styles.container}>
-    //   <Display_doc/>
+    //   <MyDrawer/>
     //  </View> 
 
  );
@@ -95,8 +110,8 @@ const styles = StyleSheet.create({
   container: {
     
       flex: 1,
-      // backgroundColor: "#93C4CB",
-      backgroundColor: "#ffffff",
+      backgroundColor: "#93C4CB",
+      // backgroundColor: "#ffffff",
      
       padding: 10,
       paddingTop:50,
