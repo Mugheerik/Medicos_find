@@ -4,7 +4,7 @@ import Login from './Components/login';
 import Signup from './Components/signup';
 import Homepage from './Screens/Home';
 import StoreItems from './Components/Asyncstorage';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -17,7 +17,9 @@ import { Provider as PaperProvider } from 'react-native-paper';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useState } from 'react';
-import DrawerContent from './Components/drawer';
+
+import Doctors from './Components/Doctors';
+import Profile from './Components/cardiology';
 
 
 const Drawer = createDrawerNavigator();
@@ -48,8 +50,9 @@ const Tab = createMaterialBottomTabNavigator();
       }
 
 
-  function MyDrawer() {
+  function MyDrawer({navigation}) {
    const [state,setState]=useState([])
+  
     const state_update =async()=>{
       const arr=[];
           try {
@@ -66,18 +69,25 @@ const Tab = createMaterialBottomTabNavigator();
      console.log(state);
   }
     return (
-      <Drawer.Navigator    >
-        {/* { state.map(item=>{
-          return(
-            <Drawer.Screen name={item.id} component={item.id} />
-          )
-        })} */}
-        <Drawer.Screen   name="profile" component={Cardiology}  />
+      <Drawer.Navigator  screenOptions={{
+        drawerStyle: {
+          backgroundColor: '#c6cbef',
+          width: 260,
+        },
+      }}>
+       
+        <Drawer.Screen  name="Profile" component={Profile}  />
+        <Drawer.Screen  name="Pediatricians" component={Doctors} initialParams={{name:"Pediatrician"}} />
+        <Drawer.Screen  name="Nephrologists" component={Doctors} initialParams={{name:"Nephrologist"}} />
+        <Drawer.Screen  name="General Physcians" component={Doctors} initialParams={{name:"General Physcians"}}  />
+        <Drawer.Screen  name="Cardiologists" component={Doctors} initialParams={{name:"Cardiologists"}} />
+        <Drawer.Screen  name="Gyneacologists" component={Doctors} initialParams={{name:"Gyneacologists"}} />
+        <Drawer.Screen  name="Oncologist" component={Doctors} initialParams={{name:"Oncologist"}} />
+        <Drawer.Screen  name="Infectious Disease Physicians" component={Doctors} initialParams={{name:"Infectious Disease Physicians"}} />
+        <Drawer.Screen  name="Pulmonologists" component={Doctors} initialParams={{name:"Pulmonologists"}} />
+        <Drawer.Screen  name="Endocrinologists" component={Doctors} initialParams={{name:"Endocrinologist"}} />
+        <Drawer.Screen  name="Gastroenterologists" component={Doctors} initialParams={{name:"Gastroenterologist"}} />
         
-
-        <Drawer.Screen  name="Cardiology" component={Cardiology} />
-        <Drawer.Screen  name="pulmonology" component={Cardiology} />
-        <Drawer.Screen  name="physciology" component={Cardiology} />
         
         
         
@@ -91,10 +101,10 @@ export default function App() {
 
     <NavigationContainer >
     <Stack.Navigator   >
-      {/* <Stack.Screen name="Home" component={Homepage} />
-      <Stack.Screen name="Get_Started" component={MyTabs} />*/}
-      <Stack.Screen name="Doctor Registration" component={Doctorsignup} /> 
-      {/* <Stack.Screen name="user_profile" component={MyDrawer} options={{ headerShown: false }} /> */}
+      <Stack.Screen name="Home" component={Homepage} />
+      <Stack.Screen name="Get_Started" component={MyTabs} />
+      <Stack.Screen name="Doctor Registration" component={Doctorsignup} />
+      <Stack.Screen name="user_profile" component={MyDrawer} options={{ headerShown: false }} /> 
     </Stack.Navigator>
      
     </NavigationContainer>

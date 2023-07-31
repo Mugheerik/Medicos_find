@@ -15,17 +15,20 @@ const Display_doc=()=>{
              snapshot.forEach(doc=>{
              
             arr.push(doc.id);
-             })
+            console.log(doc.data());
+             }) 
+             setState(id=arr);
+             
             } catch (error) {
                 console.log(error)
             }
           
-       setState(id=arr);
+      
        console.log(state);
     }
 
 
-useEffect(state_update,[]);
+
 // const renderItem=(item)=>{
 //     state_update();
 //     return(
@@ -33,12 +36,12 @@ useEffect(state_update,[]);
 //             <Text>{item.id}</Text>
 //         </View>
 //     )
+   state_update();
     const renderItem = ({item}) => {
        
-         state_update;
         return (
           <View style={styles.item} >
-                     <Text >{item.id}</Text>
+            <Text >{item.id}</Text>
             
           
           </View>

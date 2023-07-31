@@ -17,10 +17,16 @@ import {
 } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Cardiology from './cardiology';
+import { useNavigation } from '@react-navigation/native';
+import { getAuth } from 'firebase/auth';
 
- function DrawerContent(props,navigation) {
+ function DrawerContent(props) {
+const Navigation=props.navigation;
+
+  
+  
   return (
-    <DrawerContentScrollView {...props}>
+    <DrawerContentScrollView >
       <View
         style={
           styles.drawerContent
@@ -62,7 +68,11 @@ import Cardiology from './cardiology';
                 />
                 )}
                 label="Profile"
-                onPress={() => navigation.navigate('Home')}
+                onPress={()=>Navigation.navigate('Doctors',{name:'Nephrologist'})}
+                />
+          <DrawerItem
+                label="Pediatrician"
+                onPress={()=>Navigation.navigate('Doctors',{name:'Pediatrician'})}
                 />
         </Drawer.Section>
        

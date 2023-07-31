@@ -27,10 +27,12 @@ console.log("profile")};
 createUserWithEmailAndPassword(auth, email, pass)
   .then((userCredential) => {
     // Signed in 
+     
+    
     writedata();
     setSignup(true);
   gotoprofile();
-    const user = userCredential.user;
+    const user = userCredential;
     // ...
   })
   .catch((error) => {

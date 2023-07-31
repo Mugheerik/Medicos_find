@@ -1,4 +1,5 @@
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth,signInWithEmailAndPassword } from "firebase/auth";
+
 import React, { useState } from "react";
 import {
   View,
@@ -12,21 +13,21 @@ import {
 
 const Login = ({navigation}) => {
   const [login, setLogin] = useState(false);
-  const [email,setEmail] = useState("");
-  const [pass,setPass] = useState("");
+  const [email,setEmail] = useState();
+  const [pass,setPass] = useState();
   
-  const gotoprofile=()=> navigation.navigate('user_profile')
+  const gotoprofile=()=>{ navigation.navigate('user_profile');
+  console.log("profile")};
+
   const handleLogin = () =>{
+console.log("loging in");
+console.log("trying");
 
 
 const auth = getAuth();
 signInWithEmailAndPassword(auth, email, pass)
-.then((userCredential) => {
-    setLogin(true);
-    gotoprofile();
-    console.log("logined")
-    
-    // Signed in 
+  .then((userCredential) => {
+    console.log("signed in")
     const user = userCredential.user;
     // ...
   })
@@ -34,9 +35,12 @@ signInWithEmailAndPassword(auth, email, pass)
     const errorCode = error.code;
     const errorMessage = error.message;
   });
-  };
+
+
 
  
+console.log("done")
+};
 
   return (
     <View style={styles.container}>

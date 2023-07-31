@@ -21,47 +21,53 @@ const Doctorsignup = ({navigation}) => {
   const [email, setEmail] = useState("");
   const [location, setLocation] = useState("");
   const [password, setPassword] = useState("");
-  const [Category, setCategory] = useState("");
+  const [phone, setPhone] = useState("");
+  const [Category, setCategory] = useState();
 
-  const [state,setState]=useState([""])
-    const state_update =async()=>{
-        const arr=[];
-            try {
-                const snapshot=await getDocs(collection(db,"Doctor"));
-             snapshot.forEach(doc=>{
-             
-            arr.push(doc.id);
-             })
-            } catch (error) {
-                console.log(error)
-            }
-          
-       setState(value=arr);
-       
-    }
+
+ const categories=[
+    {id:1,value:"Cardiologist",label:"Cardiologist"},
+    {id:2,value:"Endocrinologist",label:"Endocrinologist"},
+    {id:3,value:"Gastroenterologist",label:"Gastroenterologist"},
+    {id:4,value:"General Physician",label:"General Physician"},
+    {id:5,value:"Gynecologist",label:"Gynecologist"},
+    {id:6,value:"Infectious Disease Physician",label:"Infectious Disease Physician"},
+    {id:7,value:"Nephrologist",label:"Nephrologist"},
+    {id:8,value:"Oncologist",label:"Oncologist"},
+    {id:9,value:"Pediatrician",label:"Pediatrician"},
+    {id:10,value:"Pulmonologist",label:"Pulmonologist"}
+    
+ ];
+
+
+
+
+
   
-state_update();
-  
-  
-  
+   
  
+ const handleChange = (itemValue) => {
+  setCategory(itemValue);
+  console.log(itemValue);
+  
 
-  
-  
+};
 
   const adddata=async()=>{
-
-   
-   try {
-   
+    try {
+    const value=Category
+    console.log(value)
     
-    await addDoc(db.collection("Doctor").doc(Category)),{
+     const colref=collection(db,"Doctor",value,"doc_users");
+    
+    await addDoc(colref,{
       Name:name,
       Email:email,
+      Phone:phone,
      Password:password,
      Location:location,
     Category:Category,
- }
+ })
    } catch (error) {
     console.log(error);
    }
@@ -80,53 +86,51 @@ state_update();
     // console.log("data added");
 
    }
-  const handleChange = (itemValue) => {
-    setCategory(itemValue);
-    console.log(itemValue);
-    
- 
-};
+  
 
 
     
  
     
-const handleDoctor = () => {
+const handleDoctor = async () => {
 
   adddata();
     
-  // const auth =  getAuth();
-  // createUserWithEmailAndPassword(auth, email, password)
-  //   .then((userCredential) => {
-  //     // Signed in 
-  //     setRegister(true);
+//   const auth =  getAuth();
+//  await  createUserWithEmailAndPassword(auth, email, password)
+//     .then((userCredential) => {
+//       // Signed in 
+//       setRegister(true);
       
-  //   adddata();
-  //     const user = userCredential.user;
-  //     console.log(user.displayName)
-  //   })
-  //   .catch((error) => {
-  //     const errorCode = error.code;
-  //     const errorMessage = error.message;
-  //    console.log(errorCode,errorMessage)
-  //   });
+//     adddata();
+//       const user = userCredential.user;
+//       console.log(user.displayName)
+//     })
+//     .catch((error) => {
+//       const errorCode = error.code;
+//       const errorMessage = error.message;
+//      console.log(errorCode,errorMessage)
+//     });
     };
  
   
 
 
-
+   
 
     
     
  
   const mapItemsToOptions = (items) => {
+   
+    
     return items.map((item) => {
+      
       return (
         <Picker.Item style={styles.picker}
-
-          value={item.id}
-          label={item.id}
+          key={item.id}
+          label={item.value}
+          value={item.value}
         />
       );
     });
@@ -139,6 +143,7 @@ const handleDoctor = () => {
       <StatusBar backgroundColor="#000" />
       <ScrollView>
         <View style={styles.header}>
+         
           <Text style={styles.title}>Signup</Text>
         </View>
         
@@ -156,6 +161,16 @@ const handleDoctor = () => {
               autoCapitalize="none"
               value={email}
               onChangeText={setEmail}
+            />
+            
+            <TextInput
+              keyboardType='numeric'
+              placeholder="Phone"
+              style={styles.input}
+              autoCapitalize="none"
+              
+              value={phone}
+              onChangeText={setPhone}
             />
             <TextInput
               placeholder="Clinic Location"
@@ -179,7 +194,7 @@ const handleDoctor = () => {
         style={styles.input}
         
       >
-        {mapItemsToOptions(state)}
+        {mapItemsToOptions(categories)}
         
         
       </Picker>
